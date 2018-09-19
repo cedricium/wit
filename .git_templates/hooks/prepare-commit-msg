@@ -32,5 +32,11 @@ WIT=$HOME/.wit
 RANDOM_COMMIT_MSG="$(sort -R $WIT/res/commit_messages.txt | head -n1)"
 
 if [ $(git rev-list --all --count) -eq  0 ]; then
-  sed -i "1s/.*/${RANDOM_COMMIT_MSG}/" "$COMMIT_MSG_FILE"
+  # check OS - if 'darwin*' (macOS), supply empty extension to `sed -i` command
+  # refs: https://github.com/cedricium/wit/issues/2
+  if [[ $(echo "$OSTYPE") == "darwin"* ]]; then
+    sed -i '' "1s/.*/${RANDOM_COMMIT_MSG}/" "$COMMIT_MSG_FILE"
+  else
+    sed -i "1s/.*/${RANDOM_COMMIT_MSG}/" "$COMMIT_MSG_FILE"
+  fi
 fi
