@@ -35,6 +35,13 @@ main() {
     WIT=$HOME/.wit
   fi
 
+  # ensure ~/.wit dir does not exist before `git clone`
+  if [ -d "$WIT" ]; then
+    printf "Looks like you already have wit installed.\n"
+    printf "You'll need to remove $WIT if you want to re-install.\n"
+    exit
+  fi
+
   # Clone this repo into $WIT
   printf "Cloning wit...\n"
   env git clone --depth=1 https://github.com/cedricium/wit.git "$WIT" || {
@@ -42,9 +49,14 @@ main() {
     exit 1
   }
 
-  # set git init.templatedir to $WIT
-  printf "Setiting the git 'init.templatedir' config variable to:\n  $WIT\n"
-  env git config --global init.templatedir "$WIT" || {
+  # ensure $WIT/.git_templates exists, set as $WIT_TEMPLATES
+  if [ -d "$WIT/.git_templates" ]; then
+    WIT_TEMPLATES="$WIT/.git_templates"
+  fi
+
+  # set git init.templatedir to $WIT_TEMPLATES
+  printf "Setting the git 'init.templatedir' config variable to:\n  $WIT_TEMPLATES\n"
+  env git config --global init.templatedir "$WIT_TEMPLATES" || {
     printf "Error: git config of templatedir failed"
     exit 1
   }

@@ -31,4 +31,6 @@ WIT=$HOME/.wit
 
 RANDOM_COMMIT_MSG="$(sort -R $WIT/res/commit_messages.txt | head -n1)"
 
-sed -i '' "1s/.*/${RANDOM_COMMIT_MSG}/" "$COMMIT_MSG_FILE"
+if [ $(git rev-list --all --count) -eq  0 ]; then
+  sed -i "1s/.*/${RANDOM_COMMIT_MSG}/" "$COMMIT_MSG_FILE"
+fi
