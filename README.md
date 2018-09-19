@@ -13,6 +13,7 @@ With a collection of funny, clever, and witty messages (brought to you
 by the many contributors of [ngerakines/commitment](https://github.com/ngerakines/commitment)),
 **wit** automatically fills out your first commit message in any newly-created git repository.
 
+Witty Waccoon mascot by Lauren Pettapiece, https://www.laurenpettapiece.com/
 
 ## Getting Started
 
