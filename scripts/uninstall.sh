@@ -18,6 +18,61 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
-# 
+#
 
-# TODO
+main() {
+  # use colors, but only if connected to a terminal, and that terminal
+  # supports them.
+  if which tput >/dev/null 2>&1; then
+    ncolors=$(tput colors)
+  fi
+  if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+    RED="$(tput setaf 1)"
+    GREEN="$(tput setaf 2)"
+    YELLOW="$(tput setaf 3)"
+    BLUE="$(tput setaf 4)"
+    NORMAL="$(tput sgr0)"
+  else
+    RED=""
+    GREEN=""
+    YELLOW=""
+    BLUE=""
+    NORMAL=""
+  fi
+
+  read -r -p "Are you sure you want to remove wit? [y/N] " confirmation
+  if [ "$confirmation" != y ] && [ "$confirmation" != Y ]; then
+    printf "${GREEN}Uninstall cancelled.${NORMAL}\n"
+    exit
+  fi
+
+  printf "\n${BLUE}Removing ~/.wit...${NORMAL}\n"
+  if [ -d ~/.wit ]; then
+    rm -rf ~/.wit
+    # ensure ~/.wit dir has been removed
+    if [ ! -d ~/.wit ]; then
+      printf "  ✔ successfully removed ~/.wit\n"
+    else
+      printf "${RED}  Error: removal of ~/.wit${NORMAL}\n"
+      exit 1
+    fi
+  else
+    printf "${YELLOW}~/.wit does not exist. Did you remove it?${NORMAL}\n"
+  fi
+
+  printf "\n${BLUE}Resetting git 'init.templatedir' config var...${NORMAL}\n"
+  if [ -n $(git config --global --get init.templatedir) ]; then
+    env git config --global --unset init.templatedir
+    # ensure 'init.templatedir' has been unset
+    if [ ! $(git config --global --get init.templatedir) ]; then
+      printf "  ✔ successfully reset 'init.templatedir' config var${NORMAL}\n"
+    else
+      printf "${RED}  Error: unset of git 'init.templatedir' var${NORMAL}\n"
+      exit 1
+    fi
+  fi
+
+  printf "\n${GREEN}Thanks for using wit. It has been uninstalled.${NORMAL}\n"
+}
+
+main

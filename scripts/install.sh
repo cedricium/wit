@@ -98,7 +98,9 @@ main() {
   echo 'Using `git commit` in any newly-created git repos will auto'
   echo 'generate your first commit message - good luck!'
   echo ''
-  printf "${NORMAL}"
+  printf 'To uninstall wit, run: '
+  printf "${BLUE}$ sh ~/.wit/scripts/uninstall.sh${NORMAL}\n"
+  echo ''
 }
 
 main
