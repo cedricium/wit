@@ -1,6 +1,6 @@
 #
 # The MIT License (MIT)
-# 
+#
 # Copyright (c) 2018 Cedric Amaya <@cedricium on GitHub>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,12 +20,33 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
-# 
+#
 
 main() {
+  # use colors, but only if connected to a terminal, and that terminal
+  # supports them.
+  if which tput >/dev/null 2>&1; then
+    ncolors=$(tput colors)
+  fi
+  if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+    RED="$(tput setaf 1)"
+    GREEN="$(tput setaf 2)"
+    YELLOW="$(tput setaf 3)"
+    BLUE="$(tput setaf 4)"
+    BOLD="$(tput bold)"
+    NORMAL="$(tput sgr0)"
+  else
+    RED=""
+    GREEN=""
+    YELLOW=""
+    BLUE=""
+    BOLD=""
+    NORMAL=""
+  fi
+
   # check if `git` is installed, exit otherwise
   command -v git 2>&1 >/dev/null || {
-    printf "Error: git is not installed! Please install git first\n"
+    printf "${RED}Error: git is not installed!${NORMAL} Please install git first.\n"
     exit 1
   }
 
@@ -37,15 +58,15 @@ main() {
 
   # ensure ~/.wit dir does not exist before `git clone`
   if [ -d "$WIT" ]; then
-    printf "Looks like you already have wit installed.\n"
-    printf "You'll need to remove $WIT if you want to re-install.\n"
+    printf "${YELLOW}wit already installed.${NORMAL}\n"
+    printf "You'll need to remove $WIT if you want to re-install wit.\n"
     exit
   fi
 
   # Clone this repo into $WIT
-  printf "Cloning wit...\n"
+  printf "\n${BLUE}Cloning wit...${NORMAL}\n"
   env git clone --depth=1 https://github.com/cedricium/wit.git "$WIT" || {
-    echo "Error: git clone of wit repo failed"
+    printf "${RED}Error: git clone of wit repo failed.${NORMAL}\n"
     exit 1
   }
 
@@ -55,21 +76,29 @@ main() {
   fi
 
   # set git init.templatedir to $WIT_TEMPLATES
-  printf "Setting the git 'init.templatedir' config variable to:\n  $WIT_TEMPLATES\n"
+  printf "\n${BLUE}Setting the git 'init.templatedir' config variable to:\n${NORMAL}${BOLD}  $WIT_TEMPLATES${NORMAL}\n"
   env git config --global init.templatedir "$WIT_TEMPLATES" || {
-    printf "Error: git config of templatedir failed"
+    printf "${RED}Error: git config of templatedir failed${NORMAL}\n"
     exit 1
   }
 
-  # print wit is installed and ready-to-go
-  echo ""
-  echo "             __________ "
-  echo "   ___      ____(_)_  /_"
-  echo "   __ | /| / /_  /_  __/"
-  echo "   __ |/ |/ /_  / / /_  "
-  echo "   ____/|__/ /_/  \__/  "
-  echo "                   ....is now installed!"
-  echo ""
+  printf "${GREEN}"
+  echo ''
+  echo ' _ _ __                _ __         _                       '
+  echo '( | / /  _______ _  __(_/ /___ __  (_)__                    '
+  echo '|/|/ _ \/ __/ -_| |/ / / __/ // / / (_-<                    '
+  echo '  /_.__/_/  \__/|___/_/\__/\_, / /_/___/                    '
+  echo '  __  __                  /___/      ___         _ __   _ _ '
+  echo ' / /_/ / ___   ______ __ __/ / ___  / _/ _    __(_/ /_ ( | )'
+  echo '/ __/ _ / -_) (_-/ _ / // / / / _ \/ _/ | |/|/ / / ___ |/|/ '
+  echo '\__/_//_\__/ /___\___\_,_/_/  \___/_/   |__,__/_/\__(_)     '
+  echo ''
+  echo 'wit successfully installed, you are all set!'
+  echo ''
+  echo 'Using `git commit` in any newly-created git repos will auto'
+  echo 'generate your first commit message - good luck!'
+  echo ''
+  printf "${NORMAL}"
 }
 
 main
