@@ -1,4 +1,4 @@
-# wit · [![GitHub](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/cedricium/wit/blob/master/LICENSE.md) [![GitHub](https://img.shields.io/badge/share-twitter-76abec.svg)](https://twitter.com/home?status=Stop%20using%20%22initial%20commit%22%20and%20have%20some%20fun%20with%20your%20first%20commit%20messages!%20%23wit%0A%0Ahttps%3A//github.com/cedricium/wit)
+# wit · [![GitHub](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/cedricium/wit/blob/master/LICENSE.md) [![GitHub](https://img.shields.io/badge/share-twitter-76abec.svg)](https://twitter.com/intent/tweet?text=Stop%20using%20%22initial%20commit%22%20and%20have%20some%20fun%20with%20your%20first%20commit%20messages!%20%23wit%0A%0Ahttps%3A//github.com/cedricium/wit)
 
 **An initial commit message generator as a git hook.**
 
